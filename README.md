@@ -2,7 +2,7 @@
 
 <p align="left">
   <img src="https://shieldclimb.com/wp-content/uploads/2025/03/ShieldClimb-logo-with-name-500x200-1.png" alt="Brand Logo" width="120"><br>
-  <img src="https://shieldclimb.com/wp-content/uploads/2025/04/ShieldClimb-–-Admin-Variation-Stock-Display-for-WooCommerce-logo.png" alt="Product Logo" width="120">
+  <img src="https://shieldclimb.com/wp-content/uploads/2025/04/ShieldClimb-Admin-Variation-Stock-Display-for-WooCommerce-Plugin-logo.png" alt="Product Logo" width="120">
 </p>
 
 [![WooCommerce Compatibility](https://img.shields.io/badge/WooCommerce-5.8+-blue)](https://woocommerce.com/)
