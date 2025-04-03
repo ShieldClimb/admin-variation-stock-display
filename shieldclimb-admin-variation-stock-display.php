@@ -4,7 +4,7 @@
  * Plugin Name: ShieldClimb – Admin Variation Stock Display for WooCommerce
  * Plugin URI: https://shieldclimb.com/free-woocommerce-plugins/admin-variation-stock-display/
  * Description: Admin Variation Stock Display lets you track variation stock easily in your admin panel. Get a clear overview of product variations in WooCommerce.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Requires Plugins: woocommerce
  * Requires at least: 5.8
  * Tested up to: 6.7
@@ -23,7 +23,7 @@ if (!defined('ABSPATH')) {
 
 // Add new column to product variations table
 function shieldclimb_admin_variation_stock_display_column( $columns ) {
-    $columns['variation_stock'] = __( 'Stock Quantity', 'textdomain' );
+    $columns['variation_stock'] = esc_html__( 'Stock Quantity', 'shieldclimb-admin-variation-stock-display' );
     return $columns;
 }
 add_filter( 'manage_edit-product_columns', 'shieldclimb_admin_variation_stock_display_column', 20 );
@@ -39,12 +39,12 @@ function shieldclimb_admin_variation_stock_display_column_content( $column, $pos
                 $variation_obj = wc_get_product( $variation['variation_id'] );
                 if ( $variation_obj ) {
                     $stock_quantity = $variation_obj->get_stock_quantity();
-                    $stock_quantities[] = ( $stock_quantity !== null ) ? $stock_quantity : __( 'N/A', 'textdomain' );
+                    $stock_quantities[] = ( $stock_quantity !== null ) ? esc_html( $stock_quantity ) : esc_html__( 'N/A', 'shieldclimb-admin-variation-stock-display' );
                 }
             }
-            echo implode( ', ', $stock_quantities );
+            echo esc_html( implode( ', ', $stock_quantities ) );
         } else {
-            echo '-';
+            echo esc_html( '-' );
         }
     }
 }
@@ -57,16 +57,32 @@ function shieldclimb_admin_variation_stock_display_column_sortable( $columns ) {
 }
 add_filter( 'manage_edit-product_sortable_columns', 'shieldclimb_admin_variation_stock_display_column_sortable' );
 
-// Define custom sorting method for the stock quantity column
-function shieldclimb_admin_variation_stock_display_column_orderby( $vars ) {
-    if ( isset( $vars['orderby'] ) && 'stock' === $vars['orderby'] ) {
-        $vars = array_merge( $vars, array(
-            'meta_key' => '_stock',
-            'orderby' => 'meta_value_num'
-        ) );
+// Optimized sorting to avoid slow query warnings with nonce verification
+function shieldclimb_admin_variation_stock_display_column_orderby( $query ) {
+    global $pagenow;
+
+    if (is_admin() && 'edit.php' === $pagenow && isset($_GET['orderby']) && 'stock' === $_GET['orderby']) {
+        // Ensure nonce is properly sanitized before verification
+        $nonce = isset($_GET['_wpnonce']) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
+
+        // Verify nonce before processing request
+        if (!wp_verify_nonce($nonce, 'shieldclimb_stock_order')) {
+            wp_die( esc_html__( 'Security check failed', 'shieldclimb-admin-variation-stock-display' ) );
+        }
+
+        $query->set('orderby', 'meta_value_num');
+        $query->set('meta_key', '_stock');
+        $query->set('meta_type', 'NUMERIC'); // Ensures numeric sorting
     }
-    return $vars;
 }
-add_filter( 'request', 'shieldclimb_admin_variation_stock_display_column_orderby' );
+add_action('pre_get_posts', 'shieldclimb_admin_variation_stock_display_column_orderby');
+
+// Add nonce field to product admin sorting form
+function shieldclimb_admin_variation_stock_add_nonce() {
+    if (is_admin()) {
+        echo '<input type="hidden" name="_wpnonce" value="' . esc_attr(wp_create_nonce('shieldclimb_stock_order')) . '">';
+    }
+}
+add_action('manage_product_posts_custom_column', 'shieldclimb_admin_variation_stock_add_nonce');
 
 ?>

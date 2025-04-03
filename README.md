@@ -40,6 +40,12 @@ ShieldClimb's **[Admin Variation Stock Display](https://shieldclimb.com/free-woo
 
 ## 📜 Changelog
 
+### v1.0.1
+- Fixed mismatched text domain issues
+- Escaped all output for improved security
+- Sanitized and verified nonce for safer input handling
+- Optimized slow query warnings by adjusting sorting logic
+
 ### v1.0.0
 - Initial release
 

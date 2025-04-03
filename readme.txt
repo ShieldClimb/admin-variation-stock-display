@@ -4,7 +4,7 @@ Donate link: https://shieldclimb.com/
 Tags: woocommerce variation stock, woocommerce stock management, variation stock display, woocommerce inventory tracking, manage woocommerce stock
 Requires at least: 5.8
 Tested up to: 6.7
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Requires PHP: 7.2
 WC requires at least: 5.8
 WC tested up to: 9.7.1
@@ -33,6 +33,13 @@ See more via [this website](https://shieldclimb.com/free-woocommerce-plugins/adm
 2. screenshot-2.png
 
 == ChangeLog ==
+
+= V1.0.1 =
+
+* Fixed mismatched text domain issues
+* Escaped all output for improved security
+* Sanitized and verified nonce for safer input handling
+* Optimized slow query warnings by adjusting sorting logic
 
 = V1.0.0 =
 
