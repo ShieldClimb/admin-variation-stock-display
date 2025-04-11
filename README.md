@@ -40,6 +40,9 @@ ShieldClimb's **[Admin Variation Stock Display](https://shieldclimb.com/free-woo
 
 ## 📜 Changelog
 
+### v1.0.2
+- Updated: Tested up to WordPress 6.8 and WooCommerce 9.8.1
+
 ### v1.0.1
 - Fixed mismatched text domain issues
 - Escaped all output for improved security
